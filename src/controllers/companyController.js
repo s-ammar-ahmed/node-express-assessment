@@ -1,3 +1,4 @@
+const { validationResult } = require("express-validator");
 const Comapny = require("../models/companyModel");
 
 class ComapnyController {
@@ -29,6 +30,11 @@ class ComapnyController {
   }
 
   static createCompany(req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ succes: false, errors: errors.array() });
+    }
+
     const companyData = req.body;
     Comapny.creat(companyData, (id) => {
       res.status(201).json({
@@ -40,6 +46,11 @@ class ComapnyController {
   }
 
   static updateCompany(req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ succes: false, errors: errors.array() });
+    }
+
     const id = req.params.id;
     const companyData = req.body;
     Comapny.updat(id, companyData, (result) => {

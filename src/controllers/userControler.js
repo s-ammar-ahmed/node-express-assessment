@@ -1,3 +1,4 @@
+const { validationResult } = require("express-validator");
 const Uesr = require("../models/userModel");
 
 class UesrController {
@@ -29,6 +30,11 @@ class UesrController {
   }
 
   static createUser(req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ succes: false, errors: errors.array() });
+    }
+
     const userData = req.body;
     Uesr.creat(userData, (id) => {
       res.status(201).json({
@@ -40,6 +46,11 @@ class UesrController {
   }
 
   static updateUser(req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ succes: false, errors: errors.array() });
+    }
+
     const id = req.params.id;
     const userData = req.body;
     Uesr.updat(id, userData, (result) => {
